@@ -37,7 +37,7 @@ async function run() {
       res.send(service);
     });
 
-    // orders API
+    // orders api
     app.get("/orders", async (req, res) => {
       let query = {};
 
@@ -58,6 +58,19 @@ async function run() {
       res.send(result);
     });
 
+    app.patch("/orders/:id", async (req, res) => {
+      const id = req.params.id;
+      const status = req.body.status;
+      const query = { _id: ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          status: status,
+        },
+      };
+      const result = await orderCollection.updateOne(query, updatedDoc);
+      res.send(result);
+    });
+
     app.delete("/orders/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -75,5 +88,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Genius Car Server running on Port ${port}`);
+  console.log(`Genius Car server running on ${port}`);
 });
